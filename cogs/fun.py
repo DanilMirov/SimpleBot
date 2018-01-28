@@ -7,6 +7,7 @@ def color(ctx):
     color = '6553855'
     if ctx.message.server is not None:
         color = ctx.message.server.me.color
+    return color
 
 class Fun:
     def __init__(self, bot):
