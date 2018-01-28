@@ -1,6 +1,8 @@
 from discord.ext.commands import Bot
 import os
 
+__version__ = "0.3"
+
 description = """
 Simple Bot By DanilMirov
 """
