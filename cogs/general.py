@@ -49,8 +49,10 @@ class General:
                         member = mem
                         for role in roles:
                             if role.name == "Участники":
-                                await self.bot.add_roles(member, role)
-                                await self.bot.say('Верификация закончена')
+                                try:
+                                    await self.bot.add_roles(member, role)
+                                    await self.bot.say('Верификация пройдена')
+                                except: await self.bot.say('Нету прав давать роли')
                                 return
         await self.bot.say('Роль "Участники" не найдена')
 
