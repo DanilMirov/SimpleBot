@@ -31,13 +31,28 @@ class General:
 
     @commands.command(description='Test!')
     async def test(self):
-	     await self.bot.say(':ok_hand:')
+        await self.bot.say(':ok_hand:')
     @commands.command()
     async def say(self, *, say):
-	     await self.bot.say(say)
+        await self.bot.say(say)
     @commands.command(description='Калькулятор. Умножение: *, Деление: /, Плюс: +, Минус: -')
     async def calc(self, *, calc):
-	     await self.bot.say(EvalInt(calc))
+        await self.bot.say(EvalInt(calc))
+    @commands.command(pass_context=True, description='Комманда верефикации, необходима роль "Участники"')
+    async def verify(self, ctx):
+        for server in self.bot.servers:
+            if server.name == ctx.message.server.name:
+                roles = server.roles
+                members = server.members
+                for mem in members:
+                    if mem.id == ctx.message.author.id:
+                        member = mem
+                        for role in roles:
+                            if role.name == "Участники":
+                                await self.bot.add_roles(member, role)
+                                await self.bot.say('Верификация закончена')
+                                return
+        await self.bot.say('Роль "Участники" не найдена')
 
 def setup(bot):
     bot.add_cog(General(bot))
