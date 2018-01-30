@@ -1,22 +1,22 @@
+import discord
 from discord.ext.commands import Bot
-import os
-
-__version__ = "0.3"
+import os, config
 
 description = """
 Simple Bot By DanilMirov
 """
+
 def prefix(bot, msg):
     id = bot.user.id
     px = [f'<@!{id}> ', f'<@{id}> ']
-    px.append('s.')
+    px.append('s.'); px.append('S.')
     if msg.server is None:
         px.append('!')
         px.append('?')
     return px
 
 bot = Bot(command_prefix=prefix, description=description)
-initial_extensions = ('cogs.general', 'cogs.events', 'cogs.fun')
+
 for file in os.listdir("cogs"):
     if file.endswith(".py"):
         name = 'cogs.'+file[:-3]
@@ -25,4 +25,5 @@ for file in os.listdir("cogs"):
             print(f'Loaded {name}.')
         except Exception as e:
             print(f'Failed to load extension {name}. Error:\n{e}')
-bot.run('token')
+
+bot.run(config.token)
