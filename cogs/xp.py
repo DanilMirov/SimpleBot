@@ -1,9 +1,12 @@
 import discord
 from discord.ext import commands
+import config
 
 import sqlite3
 data = sqlite3.connect('data.sqlite')
+
 cur = data.cursor()
+color = config.color
 
 class XP:
     def __init__(self, bot):
@@ -19,12 +22,11 @@ class XP:
     @commands.command(pass_context=True, description='XP')
     async def xp(self, ctx):
         cur.execute('SELECT * FROM xp WHERE id="{0}"'.format(ctx.message.author.id))
-        try: await self.bot.say('XP: {0}'.format(cur.fetchone()[1]))
+        try: await self.bot.say(embed=discord.Embed(description='XP: {0}'.format(cur.fetchone()[1]), color=color))
         except:
-            await self.bot.say('У вас нет XP')
             cur.execute('INSERT INTO xp VALUES ("{0}", 0)'.format(ctx.message.author.id)); data.commit()
             cur.execute('SELECT * FROM xp WHERE id="{0}"'.format(ctx.message.author.id))
-            await self.bot.say('XP: {0}'.format(cur.fetchone()[1]))
+            await self.bot.say(embed=discord.Embed(description='У вас нет XP\nXP: {0}'.format(cur.fetchone()[1]), color=color))
 
 def setup(bot):
     bot.add_cog(XP(bot))
