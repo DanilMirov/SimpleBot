@@ -1,4 +1,11 @@
+import discord
 from discord.ext import commands
+import config
+
+def formatter(s):
+    s = s.replace('@', '@\u200b').replace('!', '!\u200b')
+    return s
+def emb(text): return discord.Embed(description=text, color=config.color)
 
 # Dont My Code
 import ast, math
@@ -31,13 +38,16 @@ class General:
 
     @commands.command(description='Test!')
     async def test(self):
-        await self.bot.say(':ok_hand:')
+        await self.bot.say(embed=emb(':ok_hand:'))
     @commands.command()
     async def say(self, *, say):
-        await self.bot.say(say)
+        await self.bot.say(embed=emb(say))
+    @commands.command(description='Перевернуть слова', aliases=['r', 'rev'])
+    async def reverse(self, *, text_to_reverse):
+        await self.bot.say(embed=emb(text_to_reverse[::-1]))
     @commands.command(description='Калькулятор. Умножение: *, Деление: /, Плюс: +, Минус: -')
     async def calc(self, *, calc):
-        await self.bot.say(EvalInt(calc))
+        await self.bot.say(embed=emb(EvalInt(calc)))
     @commands.command(pass_context=True, description='Комманда верефикации, необходима роль "Участники"')
     async def verify(self, ctx):
         for server in self.bot.servers:
@@ -51,10 +61,10 @@ class General:
                             if role.name == "Участники":
                                 try:
                                     await self.bot.add_roles(member, role)
-                                    await self.bot.say('Верификация пройдена')
-                                except: await self.bot.say('Нету прав давать роли')
+                                    await self.bot.say(embed=emb('Верификация пройдена'))
+                                except: await self.bot.say(embed=emb('Нету прав давать роли'))
                                 return
-        await self.bot.say('Роль "Участники" не найдена')
+        await self.bot.say(embed=emb('Роль "Участники" не найдена'))
 
 def setup(bot):
     bot.add_cog(General(bot))
